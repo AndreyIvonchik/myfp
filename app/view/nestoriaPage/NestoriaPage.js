@@ -24,6 +24,7 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPage', {
                         {
                             xtype: 'combobox',
                             name: 'countryField',
+                            autoSelect: true,
                             emptyText: 'Select a country...',
                             queryMode: 'local',
                             bind: {
@@ -43,12 +44,13 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPage', {
                         },
                         {
                             xtype: 'radiogroup',
-                            width: 150,
+                            width: 160,
                             name: 'radioBtnType',
                             items: [
                                 {boxLabel: 'to rent', inputValue: 'rent'},
-                                {boxLabel: 'to sale', inputValue: 'buy', checked: true}
+                                {boxLabel: 'to sale', inputValue: 'buy'}
                             ],
+                            simpleValue: true,
                             bind: {
                                 value: '{typeValue}'
                             }
@@ -68,8 +70,15 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPage', {
                         '->',
                         {
                             xtype: 'button',
-                            handler: 'callbackFunction',
+                            tooltip: 'Show favorites',
+                            handler: 'loadLocalStorage',
                             iconCls: 'x-fa fa-star',
+                        },
+                        {
+                            xtype: 'button',
+                            tooltip: 'Clear favorites',
+                            handler: 'clearStorage',
+                            iconCls: 'x-fa fa-trash',
                         }
                     ]
                 },
@@ -91,6 +100,7 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPage', {
                     maxWidth: 250,
                     border: 1,
                     layout: 'vbox',
+                    ui: 'test-ui-panel',
                     items: [
                         {
                             xtype: 'fieldcontainer',
@@ -101,51 +111,131 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPage', {
                                 hideLabel: true
                             },
                             bind: {
-                                fieldLabel: 'Prise ({priceCurr})'
+                                fieldLabel: 'Prise'
                             },
                             items: [{
                                 xtype: 'numberfield',
                                 name: 'minPriceField',
                                 fieldLabel: 'Start',
-                                margin: '0 5 5 0'
+                                margin: '0 5 5 0',
+                                bind: {
+                                    value: '{minPriceField}'
+                                }
                             }, {
                                 xtype: 'numberfield',
                                 name: 'maxPriceField',
-                                fieldLabel: 'End'
+                                fieldLabel: 'End',
+                                bind: {
+                                    value: '{maxPriceField}'
+                                }
                             }]
                         },
                         {
-                            xtype: 'slider',
+                            xtype: 'multislider',
                             fieldLabel: 'Bathrooms',
+                            name: 'Bathrooms',
                             labelAlign: 'top',
                             width: '100%',
-                            values: [1, 15],
+                            values: [0, 15],
                             increment: 1,
                             minValue: 0,
                             maxValue: 15,
+                            bind: {
+                                value: '{bathroomsValues}'
+                            }
                         },
                         {
-                            xtype: 'slider',
+                            xtype: 'multislider',
                             fieldLabel: 'Bedrooms',
+                            name: 'Bedrooms',
                             labelAlign: 'top',
                             width: '100%',
-                            values: [1, 15],
+                            values: [0, 15],
                             increment: 1,
                             minValue: 0,
                             maxValue: 15,
+                            bind: {
+                                value: '{bedroomsValues}'
+                            }
                         },
                         {
                             xtype: 'button',
                             text: 'Clear All',
-                            width: '100%'
+                            width: '100%',
+                            handler: 'clearFilter'
                         }
                     ]
                 },
                 {
-                    title: 'Lol',
+                    xtype: 'panel',
+                    name: 'mainPanel',
+                    waitMsgTarget: true,
                     collapsible: false,
                     region: 'center',
-                    html: '<h2>Main Page</h2><p>This is where the main content would go</p>'
+                    autoScroll: true,
+                    ui: 'test-ui-panel',
+                    bind: {
+                        title: '{mainTitle}',
+                        data: '{recordsStore}',
+                    },
+                    listeners: {
+                        click: {
+                            element: 'body',
+                            fn: 'clickRecord'
+                        }
+                    },
+                    tpl: `
+                       <tpl for=".">
+                                <div id="{#}" name="card" class="card horizontal">
+                                    <div class="card-image">
+                                        <img src="{img_url}">
+                                    </div>
+                                    <div class="card-stacked">
+                                        <div class="card-content">                                            
+                                            <p class="title">{title}</p>
+                                            <p class="price">{price_formatted}</p>
+                                            <p class="descr">{summary}</p>
+                                            <tpl if="values.favorite"> 
+                                                <button id="dellFavorite" class="btnFavoriteDell">Delete favorite</button>
+                                            <tpl else>
+                                                <button id="addFavorite" class="btnFavorite">Add favorite</button>
+                                            </tpl>                                           
+                                        </div>  
+                                    </div>
+                                </div>           
+                        </tpl>`
+                },
+                {
+                    xtype: 'container',
+                    region: 'south',
+                    layout: 'hbox',
+                    bind:{
+                      hidden: '{!showPagination}'
+                    },
+                    items:[
+                        {
+                            xtype: 'button',
+                            tooltip: 'Previous page',
+                            name: 'pagePrev',
+                            handler: 'clickPagination',
+                            iconCls: 'x-fa fa-chevron-left',
+                        },
+                        {
+                          xtype: 'displayfield',
+                          margin: '0 5',
+                          bind: {
+                              value: '{page}'
+                          }
+                        },
+                        {
+                            xtype: 'button',
+                            name: 'pageNext',
+                            tooltip: 'Next page',
+                            handler: 'clickPagination',
+                            iconCls: 'x-fa fa-chevron-right',
+                        }
+                    ]
+
                 }
             ]
         }

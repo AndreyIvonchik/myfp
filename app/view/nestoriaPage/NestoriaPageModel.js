@@ -4,22 +4,29 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPageModel', {
     alias: 'viewmodel.nestoria-page',
 
     data: {
+        mainTitle: 'Nestoria',
         showSearchBtn: false,
         countryFieldValue: null,
         cityFieldValue: null,
-        priceCurr: '$',
-        typeValue: 'buy',
+        typeValue: null,
+        minPriceField: 0,
+        maxPriceField: 'max',
+        bedroomsValues: [0, 15],
+        bathroomsValues: [0, 15],
         page: 1,
+        showPagination: false
+
     },
 
     formulas: {
         showSearchBtn: {
             bind: {
                 val1: '{countryFieldValue}',
-                val2: '{cityFieldValue}'
+                val2: '{cityFieldValue}',
+                val3: '{typeValue}'
             },
             get: function (data) {
-                return (data.val1 && data.val2);
+                return (data.val1 && data.val2 && data.val3);
             }
         },
     },
@@ -62,10 +69,5 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPageModel', {
                 }
             ]
         },
-
-        records: {
-            fields: [],
-            data: [],
-        }
     }
 });
