@@ -16,7 +16,7 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPageCoontroller', {
         this.createQuery(1);
     },
 
-    createQuery: function(page){
+    createQuery: function (page) {
         let vm = this.getViewModel(),
             view = this.getViewModel(),
             countryFieldValue = vm.get('countryFieldValue'),
@@ -49,19 +49,19 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPageCoontroller', {
         vm.set('showPagination', true);
     },
 
-    clickPagination: function(element){
+    clickPagination: function (element) {
         let vm = this.getViewModel(),
             page = vm.get('page');
 
-        if(element.name == "pageNext"){
+        if (element.name == "pageNext") {
             page += 1;
-            if(page > 50) page = 1;
+            if (page > 50) page = 1;
             this.createQuery(page);
         }
 
-        if(element.name == "pagePrev"){
+        if (element.name == "pagePrev") {
             page -= 1;
-            if(page < 1) page = 50;
+            if (page < 1) page = 50;
             this.createQuery(page);
 
         }
@@ -70,7 +70,7 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPageCoontroller', {
 
     clickRecord: function (element) {
         let vm = this.getViewModel();
-        if (element.target.closest('.card') && !element.target.id){
+        if (element.target.closest('.card') && !element.target.id) {
             let record = vm.get('recordsStore')[+element.target.closest('.card').id - 1],
                 modal = Ext.create({
                     xtype: 'nestoria-description',
@@ -89,10 +89,10 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPageCoontroller', {
                     }
                 });
             modal.show();
-        } else if( element.target.id === 'addFavorite'){
+        } else if (element.target.id === 'addFavorite') {
             let record = vm.get('recordsStore')[+element.target.closest('.card').id - 1];
             this.saveLocalStorage(record);
-        } else if( element.target.id === 'dellFavorite'){
+        } else if (element.target.id === 'dellFavorite') {
             let id = +element.target.closest('.card').id - 1;
             this.dellLocalStorage(id);
         }
@@ -118,11 +118,11 @@ Ext.define('QuickStart.view.nestoriaPage.NestoriaPageCoontroller', {
     loadLocalStorage: function () {
         let vm = this.getViewModel();
         vm.set('showPagination', false);
-        if(localStorage.getItem('nestoriaStore')) {
+        if (localStorage.getItem('nestoriaStore')) {
             vm.set('recordsStore', Ext.JSON.decode(localStorage.getItem('nestoriaStore')));
             vm.set('mainTitle', 'Favorites');
             vm.set('flagFavirie', true);
-        }else {
+        } else {
             Ext.MessageBox.alert('Status', 'Favorite list is empty.');
         }
     },

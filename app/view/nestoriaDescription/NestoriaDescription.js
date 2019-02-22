@@ -14,7 +14,7 @@ Ext.define('QuickStart.view.nestoriaDescription.NestoriaDescription', {
             xtype: 'image',
             height: 200,
             width: 300,
-            bind:{
+            bind: {
                 src: '{img}',
             }
         },
@@ -23,39 +23,39 @@ Ext.define('QuickStart.view.nestoriaDescription.NestoriaDescription', {
             flex: 1,
             layout: 'vbox',
             padding: '5 5',
-            items:[
+            items: [
                 {
                     xtype: 'displayfield',
-                    bind:{
+                    bind: {
                         value: 'Bedrooms: {bedrooms}'
                     }
                 },
                 {
                     xtype: 'displayfield',
-                    bind:{
+                    bind: {
                         value: 'Bathrooms: {bathrooms}'
                     }
                 },
                 {
                     xtype: 'displayfield',
                     cls: 'price',
-                    bind:{
+                    bind: {
                         value: '{price}'
                     }
                 },
                 {
                     xtype: 'displayfield',
-                    bind:{
+                    bind: {
                         value: '{descr}'
                     }
                 },
                 {
                     xtype: 'button',
                     text: 'Open site',
-                    bind:{
+                    bind: {
                         href: '{urlSite}'
                     },
-                    handler: function() {
+                    handler: function () {
                         if (this.href) {
                             window.location.href = this.href;
                         }
@@ -64,10 +64,10 @@ Ext.define('QuickStart.view.nestoriaDescription.NestoriaDescription', {
                 {
                     xtype: 'button',
                     text: 'Open google maps',
-                    bind:{
+                    bind: {
                         href: '{urlMaps}'
                     },
-                    handler: function() {
+                    handler: function () {
                         if (this.href) {
                             window.location.href = this.href;
                         }
